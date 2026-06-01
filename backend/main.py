@@ -312,3 +312,4 @@ def get_scan_history(limit: int = 20, db: Session = Depends(get_db)):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("backend.main:app", host=API_HOST, port=API_PORT, reload=False)
+    
