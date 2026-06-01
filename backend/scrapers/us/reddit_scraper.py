@@ -1,97 +1,129 @@
-# backend/scrapers/us/yahoo_scraper.py
+# backend/scrapers/us/reddit_scraper.py
 """
-Fetches price, volume, and 30-day average volume for a list of tickers
-using Yahoo Finance's unofficial JSON endpoint — no API key needed.
-Used to calculate volume_spike ratio (today / 30d avg).
-"""
-import requests
-import time
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
+Scans penny stock subreddits using Reddit's official free API via PRAW.
+Counts ticker mentions + basic sentiment (positive/negative word ratio).
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0 Safari/537.36"
-    )
+Setup: Reddit requires a free app registration at https://www.reddit.com/prefs/apps
+Set these in a .env file:
+    REDDIT_CLIENT_ID=...
+    REDDIT_CLIENT_SECRET=...
+    REDDIT_USER_AGENT=PennyScope/1.0
+"""
+import os
+import re
+from collections import defaultdict
+from dotenv import load_dotenv
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
+from config import REDDIT_SUBREDDITS, REDDIT_POST_LIMIT
+
+load_dotenv()
+
+# ── Lazy import PRAW so app still starts if creds are missing ────────────────
+def _get_reddit():
+    try:
+        import praw
+        return praw.Reddit(
+            client_id     = os.getenv("REDDIT_CLIENT_ID", ""),
+            client_secret = os.getenv("REDDIT_CLIENT_SECRET", ""),
+            user_agent    = os.getenv("REDDIT_USER_AGENT", "PennyScope/1.0"),
+        )
+    except Exception as e:
+        print(f"[reddit] PRAW init failed: {e}")
+        return None
+
+
+# Simple positive/negative word sets for penny stock context
+POSITIVE_WORDS = {
+    "moon", "bullish", "buy", "calls", "breakout", "squeeze", "surge",
+    "rocket", "pump", "bull", "long", "upside", "growth", "catalyst",
+    "undervalued", "gem", "strong", "explode", "run", "reversal",
+}
+NEGATIVE_WORDS = {
+    "dump", "bearish", "sell", "puts", "crash", "scam", "avoid", "short",
+    "fraud", "bankrupt", "dilution", "warning", "drop", "tank", "bagholding",
+    "rug", "manipulation", "halt", "overvalued", "trap",
 }
 
-# Yahoo Finance v8 quote endpoint — returns JSON with all fields we need
-YF_QUOTE_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=1d&interval=1d"
-YF_SUMMARY_URL = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/{ticker}?modules=summaryDetail"
+# Matches $TICK or standalone TICK (2-5 uppercase letters)
+TICKER_PATTERN = re.compile(r"\$([A-Z]{2,5})\b|\b([A-Z]{2,5})\b")
+
+# Common false positives to ignore
+IGNORE_TICKERS = {
+    "A", "I", "AM", "PM", "CEO", "IPO", "ETF", "SEC", "FDA", "USA",
+    "NYSE", "OTC", "DD", "TA", "AI", "EV", "US", "UK", "GDP", "IMO",
+    "YOLO", "FOMO", "TBH", "ATH", "ATL", "EOD", "EOW", "PT",
+}
 
 
-def fetch_yahoo_data(ticker: str) -> dict:
+def _score_sentiment(text: str) -> float:
+    """Returns sentiment score: 1.0 = all positive, 0.0 = all negative, 0.5 = neutral."""
+    words = set(text.lower().split())
+    pos = len(words & POSITIVE_WORDS)
+    neg = len(words & NEGATIVE_WORDS)
+    total = pos + neg
+    if total == 0:
+        return 0.5
+    return round(pos / total, 3)
+
+
+def _extract_tickers(text: str) -> set[str]:
+    matches = TICKER_PATTERN.findall(text)
+    found = set()
+    for m in matches:
+        ticker = m[0] or m[1]
+        if ticker and ticker not in IGNORE_TICKERS and len(ticker) >= 2:
+            found.add(ticker)
+    return found
+
+
+def fetch_reddit_signals(candidate_tickers: list[str] | None = None) -> dict[str, dict]:
     """
-    Returns enriched data for a single ticker:
-    {volume, avg_volume_30d, volume_spike, price, change_pct}
-    Returns empty dict on failure — caller must handle gracefully.
+    Scans configured subreddits.
+    If candidate_tickers provided, only tracks those.
+    Returns dict: { TICKER: {mentions, sentiment, posts} }
     """
+    reddit = _get_reddit()
+    if not reddit:
+        print("[reddit] skipping — no credentials")
+        return {}
+
+    ticker_data = defaultdict(lambda: {"mentions": 0, "sentiment_scores": [], "posts": []})
+    candidate_set = {t.upper() for t in (candidate_tickers or [])}
+
+    for sub_name in REDDIT_SUBREDDITS:
+        try:
+            subreddit = reddit.subreddit(sub_name)
+            posts = list(subreddit.new(limit=REDDIT_POST_LIMIT))
+
+            for post in posts:
+                full_text = f"{post.title} {post.selftext}"
+                tickers_in_post = _extract_tickers(full_text)
+
+                # Filter to candidates if provided
+                if candidate_set:
+                    tickers_in_post = tickers_in_post & candidate_set
+
+                sentiment = _score_sentiment(full_text)
+
+                for ticker in tickers_in_post:
+                    ticker_data[ticker]["mentions"] += 1
+                    ticker_data[ticker]["sentiment_scores"].append(sentiment)
+                    ticker_data[ticker]["posts"].append(post.title[:100])
+
+        except Exception as e:
+            print(f"[reddit] error on r/{sub_name}: {e}")
+            continue
+
+    # Aggregate sentiment
     result = {}
+    for ticker, data in ticker_data.items():
+        scores = data["sentiment_scores"]
+        result[ticker] = {
+            "mentions"  : data["mentions"],
+            "sentiment" : round(sum(scores) / len(scores), 3) if scores else 0.5,
+            "posts"     : data["posts"][:5],   # keep top 5 post titles
+        }
 
-    # ── 1. Current quote ─────────────────────────────────────────────────────
-    try:
-        resp = requests.get(
-            YF_QUOTE_URL.format(ticker=ticker),
-            headers=HEADERS,
-            timeout=10,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        meta = data["chart"]["result"][0]["meta"]
-
-        result["price"]      = meta.get("regularMarketPrice", 0)
-        result["volume"]     = meta.get("regularMarketVolume", 0)
-        result["change_pct"] = round(
-            (meta.get("regularMarketPrice", 0) - meta.get("previousClose", 1))
-            / max(meta.get("previousClose", 1), 0.0001) * 100,
-            2,
-        )
-    except Exception as e:
-        print(f"[yahoo] quote fetch failed for {ticker}: {e}")
-        return result
-
-    # ── 2. 30-day average volume ──────────────────────────────────────────────
-    try:
-        resp2 = requests.get(
-            YF_SUMMARY_URL.format(ticker=ticker),
-            headers=HEADERS,
-            timeout=10,
-        )
-        resp2.raise_for_status()
-        data2 = resp2.json()
-        avg_vol = (
-            data2["quoteSummary"]["result"][0]
-            ["summaryDetail"]
-            ["averageVolume"]["raw"]
-        )
-        result["avg_volume_30d"] = avg_vol
-
-        if avg_vol and avg_vol > 0:
-            result["volume_spike"] = round(result["volume"] / avg_vol, 2)
-        else:
-            result["volume_spike"] = 1.0
-
-    except Exception as e:
-        print(f"[yahoo] summary fetch failed for {ticker}: {e}")
-        result["avg_volume_30d"] = result.get("volume", 0)
-        result["volume_spike"]   = 1.0
-
+    print(f"[reddit] found signals for {len(result)} tickers")
     return result
-
-
-def enrich_tickers(tickers: list[str], delay: float = 0.3) -> dict[str, dict]:
-    """
-    Fetches Yahoo data for all tickers.
-    Returns dict keyed by ticker: { ticker: {volume_spike, price, ...} }
-    delay = seconds between requests to avoid rate limiting.
-    """
-    enriched = {}
-    for ticker in tickers:
-        data = fetch_yahoo_data(ticker)
-        if data:
-            enriched[ticker] = data
-        time.sleep(delay)
-    print(f"[yahoo] enriched {len(enriched)}/{len(tickers)} tickers")
-    return enriched
