@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PennyScope</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <polyline points="1,14 6,8 10,11 15,4 19,7" stroke="#1D9E75" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        PennyScope
+      </div>
+
+      <nav>
+        <a class="nav-item active" data-view="dashboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" data-view="us">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          US Market
+        </a>
+        <a class="nav-item" data-view="in">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          IN Market
+        </a>
+        <a class="nav-item" data-view="history">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          Scan History
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="ollama-status" id="ollamaStatus">
+          <span class="dot" id="ollamaDot"></span>
+          <span id="ollamaLabel">Ollama · checking…</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="topbar-left">
+          <span class="live-dot" id="liveDot"></span>
+          <span id="lastScanLabel">Last scan: checking…</span>
+        </div>
+        <div class="topbar-right">
+          <span class="market-toggle">
+            <button class="toggle-btn active" id="toggleBoth" onclick="setMarketFilter('both')">Both</button>
+            <button class="toggle-btn" id="toggleUS" onclick="setMarketFilter('us')">US</button>
+            <button class="toggle-btn" id="toggleIN" onclick="setMarketFilter('in')">IN</button>
+          </span>
+          <button class="scan-btn" id="scanBtn" onclick="triggerScan()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Run scan
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEWS -->
+      <div class="content" id="content">
+        <!-- injected by JS -->
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
