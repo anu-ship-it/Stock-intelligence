@@ -1,0 +1,217 @@
+generator client {
+provider = "prisma-client-js"
+}
+
+datasource db {
+provider = "sqlite"
+url      = env("DATABASE_URL")
+}
+
+model Market {
+id        Int      @id @default(autoincrement())
+name      String
+country   String
+currency  String
+
+stocks    Stock[]
+
+createdAt DateTime @default(now())
+}
+
+model Stock {
+id            Int       @id @default(autoincrement())
+
+symbol        String
+companyName   String
+
+sector        String?
+industry      String?
+
+marketCap     Float?
+
+marketId      Int
+market        Market    @relation(fields: [marketId], references: [id])
+
+prices        DailyPrice[]
+financials    FinancialMetric[]
+news          NewsArticle[]
+scores        StockScore[]
+recommendations Recommendation[]
+
+createdAt     DateTime @default(now())
+updatedAt     DateTime @updatedAt
+
+@@unique([symbol, marketId])
+}
+
+model DailyPrice {
+id        Int      @id @default(autoincrement())
+
+stockId   Int
+stock     Stock    @relation(fields: [stockId], references: [id])
+
+date      DateTime
+
+open      Float
+high      Float
+low       Float
+close     Float
+
+volume    Float
+
+createdAt DateTime @default(now())
+
+@@unique([stockId, date])
+}
+
+model FinancialMetric {
+id          Int      @id @default(autoincrement())
+
+stockId     Int
+stock       Stock    @relation(fields: [stockId], references: [id])
+
+reportDate  DateTime
+
+revenue     Float?
+netIncome   Float?
+
+debt        Float?
+cash        Float?
+
+eps         Float?
+
+peRatio     Float?
+pbRatio     Float?
+
+roe         Float?
+roce        Float?
+
+createdAt   DateTime @default(now())
+}
+
+model NewsArticle {
+id          Int      @id @default(autoincrement())
+
+stockId      Int?
+stock        Stock?   @relation(fields: [stockId], references: [id])
+
+headline     String
+
+summary      String?
+
+source       String
+
+url          String   @unique
+
+publishedAt  DateTime
+
+createdAt    DateTime @default(now())
+}
+
+model StockScore {
+id                 Int      @id @default(autoincrement())
+
+stockId            Int
+stock              Stock    @relation(fields: [stockId], references: [id])
+
+scanDate           DateTime
+
+technicalScore     Float
+
+fundamentalScore   Float
+
+sentimentScore     Float
+
+riskScore          Float
+
+finalScore         Float
+
+createdAt          DateTime @default(now())
+
+@@unique([stockId, scanDate])
+}
+
+model Recommendation {
+id                 Int      @id @default(autoincrement())
+
+stockId            Int
+stock              Stock    @relation(fields: [stockId], references: [id])
+
+scanDate           DateTime
+
+recommendation     String
+
+confidence         Float
+
+entryPrice         Float?
+
+targetPrice        Float?
+
+stopLoss           Float?
+
+summary            String?
+
+createdAt          DateTime @default(now())
+}
+
+model Watchlist {
+id          Int      @id @default(autoincrement())
+
+stockId     Int      @unique
+
+notes       String?
+
+createdAt   DateTime @default(now())
+}
+
+model ScanHistory {
+id                Int      @id @default(autoincrement())
+
+startedAt         DateTime
+
+completedAt       DateTime?
+
+totalStocks       Int
+
+successfulStocks  Int
+
+failedStocks      Int
+
+status            String
+
+createdAt         DateTime @default(now())
+}
+
+model BacktestRun {
+id              Int      @id @default(autoincrement())
+
+strategyName    String
+
+startDate       DateTime
+
+endDate         DateTime
+
+cagr            Float?
+
+winRate         Float?
+
+maxDrawdown     Float?
+
+sharpeRatio     Float?
+
+createdAt       DateTime @default(now())
+}
+
+model AICache {
+id           Int      @id @default(autoincrement())
+
+cacheKey     String   @unique
+
+model        String
+
+promptHash   String
+
+response     String
+
+createdAt    DateTime @default(now())
+}
