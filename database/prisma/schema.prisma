@@ -1,217 +1,217 @@
 generator client {
-provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-provider = "sqlite"
-url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model Market {
-id        Int      @id @default(autoincrement())
-name      String
-country   String
-currency  String
+  id        Int      @id @default(autoincrement())
+  name      String
+  country   String
+  currency  String
 
-stocks    Stock[]
+  stocks    Stock[]
 
-createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model Stock {
-id            Int       @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
 
-symbol        String
-companyName   String
+  symbol        String
+  companyName   String
 
-sector        String?
-industry      String?
+  sector        String?
+  industry      String?
 
-marketCap     Float?
+  marketCap     Float?
 
-marketId      Int
-market        Market    @relation(fields: [marketId], references: [id])
+  marketId      Int
+  market        Market   @relation(fields: [marketId], references: [id])
 
-prices        DailyPrice[]
-financials    FinancialMetric[]
-news          NewsArticle[]
-scores        StockScore[]
-recommendations Recommendation[]
+  prices        DailyPrice[]
+  financials    FinancialMetric[]
+  news          NewsArticle[]
+  scores        StockScore[]
+  recommendations Recommendation[]
 
-createdAt     DateTime @default(now())
-updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-@@unique([symbol, marketId])
+  @@unique([symbol, marketId])
 }
 
 model DailyPrice {
-id        Int      @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
 
-stockId   Int
-stock     Stock    @relation(fields: [stockId], references: [id])
+  stockId    Int
+  stock      Stock    @relation(fields: [stockId], references: [id])
 
-date      DateTime
+  date       DateTime
 
-open      Float
-high      Float
-low       Float
-close     Float
+  open       Float
+  high       Float
+  low        Float
+  close      Float
 
-volume    Float
+  volume     Float
 
-createdAt DateTime @default(now())
+  createdAt  DateTime @default(now())
 
-@@unique([stockId, date])
+  @@unique([stockId, date])
 }
 
 model FinancialMetric {
-id          Int      @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
 
-stockId     Int
-stock       Stock    @relation(fields: [stockId], references: [id])
+  stockId     Int
+  stock       Stock    @relation(fields: [stockId], references: [id])
 
-reportDate  DateTime
+  reportDate  DateTime
 
-revenue     Float?
-netIncome   Float?
+  revenue     Float?
+  netIncome   Float?
 
-debt        Float?
-cash        Float?
+  debt        Float?
+  cash        Float?
 
-eps         Float?
+  eps         Float?
 
-peRatio     Float?
-pbRatio     Float?
+  peRatio     Float?
+  pbRatio     Float?
 
-roe         Float?
-roce        Float?
+  roe         Float?
+  roce        Float?
 
-createdAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
 }
 
 model NewsArticle {
-id          Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
 
-stockId      Int?
-stock        Stock?   @relation(fields: [stockId], references: [id])
+  stockId       Int?
+  stock         Stock?    @relation(fields: [stockId], references: [id])
 
-headline     String
+  headline      String
 
-summary      String?
+  summary       String?
 
-source       String
+  source        String
 
-url          String   @unique
+  url           String    @unique
 
-publishedAt  DateTime
+  publishedAt   DateTime
 
-createdAt    DateTime @default(now())
+  createdAt     DateTime  @default(now())
 }
 
 model StockScore {
-id                 Int      @id @default(autoincrement())
+  id                 Int       @id @default(autoincrement())
 
-stockId            Int
-stock              Stock    @relation(fields: [stockId], references: [id])
+  stockId            Int
+  stock              Stock     @relation(fields: [stockId], references: [id])
 
-scanDate           DateTime
+  scanDate           DateTime
 
-technicalScore     Float
+  technicalScore     Float
 
-fundamentalScore   Float
+  fundamentalScore   Float
 
-sentimentScore     Float
+  sentimentScore     Float
 
-riskScore          Float
+  riskScore          Float
 
-finalScore         Float
+  finalScore         Float
 
-createdAt          DateTime @default(now())
+  createdAt          DateTime @default(now())
 
-@@unique([stockId, scanDate])
+  @@unique([stockId, scanDate])
 }
 
 model Recommendation {
-id                 Int      @id @default(autoincrement())
+  id                 Int      @id @default(autoincrement())
 
-stockId            Int
-stock              Stock    @relation(fields: [stockId], references: [id])
+  stockId            Int
+  stock              Stock    @relation(fields: [stockId], references: [id])
 
-scanDate           DateTime
+  scanDate           DateTime
 
-recommendation     String
+  recommendation     String
 
-confidence         Float
+  confidence         Float
 
-entryPrice         Float?
+  entryPrice         Float?
 
-targetPrice        Float?
+  targetPrice        Float?
 
-stopLoss           Float?
+  stopLoss           Float?
 
-summary            String?
+  summary            String?
 
-createdAt          DateTime @default(now())
+  createdAt          DateTime @default(now())
 }
 
 model Watchlist {
-id          Int      @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
 
-stockId     Int      @unique
+  stockId     Int      @unique
 
-notes       String?
+  notes       String?
 
-createdAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
 }
 
 model ScanHistory {
-id                Int      @id @default(autoincrement())
+  id                 Int      @id @default(autoincrement())
 
-startedAt         DateTime
+  startedAt          DateTime
 
-completedAt       DateTime?
+  completedAt        DateTime?
 
-totalStocks       Int
+  totalStocks        Int
 
-successfulStocks  Int
+  successfulStocks   Int
 
-failedStocks      Int
+  failedStocks       Int
 
-status            String
+  status             String
 
-createdAt         DateTime @default(now())
+  createdAt          DateTime @default(now())
 }
 
 model BacktestRun {
-id              Int      @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
 
-strategyName    String
+  strategyName     String
 
-startDate       DateTime
+  startDate        DateTime
 
-endDate         DateTime
+  endDate          DateTime
 
-cagr            Float?
+  cagr             Float?
 
-winRate         Float?
+  winRate          Float?
 
-maxDrawdown     Float?
+  maxDrawdown      Float?
 
-sharpeRatio     Float?
+  sharpeRatio      Float?
 
-createdAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
 }
 
 model AICache {
-id           Int      @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
 
-cacheKey     String   @unique
+  cacheKey      String   @unique
 
-model        String
+  model         String
 
-promptHash   String
+  promptHash    String
 
-response     String
+  response      String
 
-createdAt    DateTime @default(now())
+  createdAt     DateTime @default(now())
 }
