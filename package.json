@@ -1,0 +1,68 @@
+{
+  "name": "stock-intelligence",
+  "version": "1.0.0",
+  "description": "Desktop Stock Intelligence Platform",
+  "main": "dist/electron/main.js",
+  "author": "Alpha",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:electron\"",
+    "dev:renderer": "vite",
+    "dev:electron": "wait-on tcp:5173 && electron .",
+    "build": "tsc && vite build",
+    "package": "electron-builder",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "lint": "eslint .",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "axios": "^1.17.0",
+    "cheerio": "^1.2.0",
+    "electron-log": "^5.4.0",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "node-cron": "^4.2.1",
+    "ollama": "^0.5.18",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.16.0",
+    "technicalindicators": "^3.1.0",
+    "winston": "^3.19.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.13.0",
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "concurrently": "^9.2.1",
+    "electron": "^37.10.3",
+    "electron-builder": "^26.8.1",
+    "eslint": "^9.39.4",
+    "playwright": "^1.60.0",
+    "prisma": "^6.19.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.5",
+    "vitest": "^3.2.6",
+    "wait-on": "^8.0.5"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anu-ship-it/pennyscope.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/anu-ship-it/pennyscope/issues"
+  },
+  "homepage": "https://github.com/anu-ship-it/pennyscope#readme"
+}
