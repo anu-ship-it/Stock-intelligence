@@ -1,7 +1,7 @@
 import { prisma } from '../utils/prisma';
 
 export class ScoreRepository {
-  async saveScore(data: {
+  async save(data: {
     stockId: number;
     scanDate: Date;
     technicalScore: number;
@@ -15,7 +15,7 @@ export class ScoreRepository {
     });
   }
 
-  async latestScore(stockId: number) {
+  async latest(stockId: number) {
     return prisma.stockScore.findFirst({
       where: {
         stockId,

@@ -1,7 +1,7 @@
 import { prisma } from '../utils/prisma';
 
 export class RecommendationRepository {
-  async createRecommendation(data: {
+  async create(data: {
     stockId: number;
     scanDate: Date;
     recommendation: string;
@@ -16,12 +16,12 @@ export class RecommendationRepository {
     });
   }
 
-  async latestRecommendations(limit = 20) {
+  async latest(limit = 20) {
     return prisma.recommendation.findMany({
+      take: limit,
       orderBy: {
         scanDate: 'desc',
       },
-      take: limit,
       include: {
         stock: true,
       },

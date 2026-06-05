@@ -1,7 +1,7 @@
 import { prisma } from '../utils/prisma';
 
 export class PriceRepository {
-  async createPrice(data: {
+  async upsertPrice(data: {
     stockId: number;
     date: Date;
     open: number;
@@ -18,17 +18,14 @@ export class PriceRepository {
         },
       },
       create: data,
-      update: {
-        open: data.open,
-        high: data.high,
-        low: data.low,
-        close: data.close,
-        volume: data.volume,
-      },
+      update: data,
     });
   }
 
-  async getHistory(stockId: number, limit = 250) {
+  async getHistory(
+    stockId: number,
+    limit = 250
+  ) {
     return prisma.dailyPrice.findMany({
       where: {
         stockId,

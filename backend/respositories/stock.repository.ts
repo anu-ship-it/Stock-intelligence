@@ -14,6 +14,12 @@ export class StockRepository {
     });
   }
 
+  async findById(id: number) {
+    return prisma.stock.findUnique({
+      where: { id },
+    });
+  }
+
   async findBySymbol(symbol: string) {
     return prisma.stock.findFirst({
       where: {
@@ -30,7 +36,10 @@ export class StockRepository {
     });
   }
 
-  async updateMarketCap(stockId: number, marketCap: number) {
+  async updateMarketCap(
+    stockId: number,
+    marketCap: number
+  ) {
     return prisma.stock.update({
       where: {
         id: stockId,

@@ -1,40 +1,33 @@
 import { prisma } from '../utils/prisma';
 
-export class PriceRepository {
-  async createPrice(data: {
-    stockId: number;
-    date: Date;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-    volume: number;
+export class NewsRepository {
+  async upsertArticle(data: {
+    stockId?: number;
+    headline: string;
+    summary?: string;
+    source: string;
+    url: string;
+    publishedAt: Date;
   }) {
-    return prisma.dailyPrice.upsert({
+    return prisma.newsArticle.upsert({
       where: {
-        stockId_date: {
-          stockId: data.stockId,
-          date: data.date,
-        },
+        url: data.url,
       },
       create: data,
-      update: {
-        open: data.open,
-        high: data.high,
-        low: data.low,
-        close: data.close,
-        volume: data.volume,
-      },
+      update: {},
     });
   }
 
-  async getHistory(stockId: number, limit = 250) {
-    return prisma.dailyPrice.findMany({
+  async getLatestNews(
+    stockId: number,
+    limit = 20
+  ) {
+    return prisma.newsArticle.findMany({
       where: {
         stockId,
       },
       orderBy: {
-        date: 'desc',
+        publishedAt: 'desc',
       },
       take: limit,
     });
