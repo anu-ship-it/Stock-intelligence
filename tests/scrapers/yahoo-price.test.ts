@@ -5,7 +5,11 @@ async function run() {
 
   const data = await scraper.getHistory('AAPL');
 
-  console.dir(data, { depth: 4 });
+  console.log('Rows:', data.length);
+
+  console.log(data[0]);
+
+  console.log(data[data.length - 1]);
 }
 
 run();
