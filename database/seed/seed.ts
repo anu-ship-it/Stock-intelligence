@@ -1,28 +1,40 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../backend/utils/prisma';
 
 async function main() {
-  await prisma.market.createMany({
-    data: [
-      {
-        name: 'NSE',
-        country: 'India',
-        currency: 'INR',
-      },
-      {
-        name: 'NASDAQ',
-        country: 'USA',
-        currency: 'USD',
-      },
-    ],
+  console.log('Seeding database...');
+
+  await prisma.market.upsert({
+    where: {
+      id: 1
+    },
+    update: {},
+    create: {
+      name: 'NSE',
+      country: 'India',
+      currency: 'INR'
+    }
   });
 
-  console.log('Seed Complete');
+  await prisma.market.upsert({
+    where: {
+      id: 2
+    },
+    update: {},
+    create: {
+      name: 'NASDAQ',
+      country: 'USA',
+      currency: 'USD'
+    }
+  });
+
+  console.log('Seed completed.');
 }
 
 main()
-  .catch(console.error)
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  })
   .finally(async () => {
     await prisma.$disconnect();
   });
