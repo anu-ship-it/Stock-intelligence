@@ -5,6 +5,9 @@
   "main": "dist/electron/main.js",
   "author": "Alpha",
   "license": "MIT",
+  "prisma": {
+    "schema": "./database/prisma/schema.prisma"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:electron\"",
     "dev:renderer": "vite",
