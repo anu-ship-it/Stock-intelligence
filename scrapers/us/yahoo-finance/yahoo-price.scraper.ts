@@ -1,13 +1,12 @@
-import yahooFinance from 'yahoo-finance2';
+import YahooFinance from 'yahoo-finance2';
+
+const yahooFinance = new YahooFinance();
 
 export class YahooPriceScraper {
   async getHistory(symbol: string) {
-    const result =
-      await yahooFinance.historical(symbol, {
-        period1: '2024-01-01',
-        interval: '1d'
-      });
-
-    return result;
+    return yahooFinance.chart(symbol, {
+      period1: '2024-01-01',
+      interval: '1d'
+    });
   }
 }
