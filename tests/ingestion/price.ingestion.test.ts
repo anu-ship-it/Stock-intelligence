@@ -6,12 +6,32 @@ async function run() {
   const service =
     new PriceIngestionService();
 
-  const count =
-    await service.ingest('AAPL');
+  const symbols = [
+    'AAPL',
+    'MSFT',
+    'TCS'
+  ];
 
-  console.log(
-    `Inserted ${count} candles`
-  );
+  for (const symbol of symbols) {
+
+    try {
+
+      const count =
+        await service.ingest(symbol);
+
+      console.log(
+        `${symbol}: ${count} candles`
+      );
+
+    } catch (error) {
+
+      console.error(
+        `${symbol}: FAILED`,
+        error
+      );
+
+    }
+  }
 }
 
 run();
