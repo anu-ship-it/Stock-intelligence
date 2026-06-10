@@ -1,8 +1,6 @@
-import { EMAEngine } from "./ema.engine.test";
+import { EMAEngine } from '../../../backend/engines/technical/ema.engine';
 
 async function run() {
-  const engine = new EMAEngine();
-
   const closes = [
     100,101,102,103,104,
     105,106,107,108,109,
@@ -10,8 +8,14 @@ async function run() {
     115,116,117,118,119
   ];
 
+  const engine = new EMAEngine();
+
+  const ema20 =
+    engine.calculate(closes, 20);
+
   console.log(
-    engine.calculate(closes, 10)
+    'EMA20:',
+    ema20
   );
 }
 
