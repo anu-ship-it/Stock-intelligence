@@ -1,4 +1,4 @@
-import { EMAEngine } from '../../engines/technical/ema.engine';
+import { EMAEngine } from "./ema.engine.test";
 
 async function run() {
   const engine = new EMAEngine();
