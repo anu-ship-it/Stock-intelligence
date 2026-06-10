@@ -1,7 +1,11 @@
 import { MACD } from 'technicalindicators';
+import { MACDResult } from './types';
 
 export class MACDEngine {
-  calculate(closes: number[]) {
+  calculate(
+    closes: number[]
+  ): MACDResult | null {
+
     const result = MACD.calculate({
       values: closes,
       fastPeriod: 12,
@@ -13,14 +17,14 @@ export class MACDEngine {
 
     const latest = result.at(-1);
 
-if (!latest) {
-  return null;
-}
+    if (!latest) {
+      return null;
+    }
 
-return {
-  MACD: latest.MACD ?? 0,
-  signal: latest.signal ?? 0,
-  histogram: latest.histogram ?? 0
-};
+    return {
+      MACD: latest.MACD ?? 0,
+      signal: latest.signal ?? 0,
+      histogram: latest.histogram ?? 0
+    };
   }
 }

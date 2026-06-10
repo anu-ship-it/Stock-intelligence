@@ -45,16 +45,17 @@ export class TechnicalAnalysisService {
         250
       );
 
+      const closes =
+      prices
+        .reverse()
+        .map(p => p.close);
+
+
     if (prices.length < 60) {
       throw new Error(
         `Not enough price history for ${symbol}`
       );
     }
-
-    const closes =
-      prices
-        .reverse()
-        .map(p => p.close);
 
     const currentPrice =
       closes[closes.length - 1];
