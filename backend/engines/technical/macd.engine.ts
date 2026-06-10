@@ -2,7 +2,6 @@ import { MACD } from 'technicalindicators';
 
 export class MACDEngine {
   calculate(closes: number[]) {
-
     const result = MACD.calculate({
       values: closes,
       fastPeriod: 12,
@@ -12,6 +11,6 @@ export class MACDEngine {
       SimpleMASignal: false
     });
 
-    return result.at(-1);
+    return result.at(-1) ?? null;
   }
 }
