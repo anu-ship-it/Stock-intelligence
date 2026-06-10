@@ -11,6 +11,16 @@ export class MACDEngine {
       SimpleMASignal: false
     });
 
-    return result.at(-1) ?? null;
+    const latest = result.at(-1);
+
+if (!latest) {
+  return null;
+}
+
+return {
+  MACD: latest.MACD ?? 0,
+  signal: latest.signal ?? 0,
+  histogram: latest.histogram ?? 0
+};
   }
 }

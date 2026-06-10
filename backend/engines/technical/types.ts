@@ -11,3 +11,8 @@ export interface TechnicalIndicators {
 
   histogram: number;
 }
+export interface MACDResult {
+  MACD: number;
+  signal: number;
+  histogram: number;
+}
