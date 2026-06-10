@@ -32,16 +32,25 @@ export class PriceIngestionService {
       );
 
     for (const candle of history) {
-      await this.priceRepository.upsertPrice({
-        stockId: stock.id,
-        date: candle.date,
-        open: candle.open,
-        high: candle.high,
-        low: candle.low,
-        close: candle.close,
-        volume: candle.volume
-      });
-    }
+       if (
+    candle.close <= 0 ||
+    candle.open <= 0 ||
+    candle.high <= 0 ||
+    candle.low <= 0
+  ) {
+    continue;
+  }
+
+  await this.priceRepository.upsertPrice({
+    stockId: stock.id,
+    date: candle.date,
+    open: candle.open,
+    high: candle.high,
+    low: candle.low,
+    close: candle.close,
+    volume: candle.volume
+  });
+}
 
     return history.length;
   }

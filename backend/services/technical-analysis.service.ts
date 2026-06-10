@@ -45,10 +45,20 @@ export class TechnicalAnalysisService {
         250
       );
 
-      const closes =
+    const closes =
       prices
         .reverse()
         .map(p => p.close);
+
+    console.log(
+      'Last 10 closes:',
+      closes.slice(-10)
+    );
+
+    console.log(
+      'Current price candidate:',
+      closes[closes.length - 1]
+    );
 
 
     if (prices.length < 60) {

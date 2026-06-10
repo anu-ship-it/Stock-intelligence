@@ -16,13 +16,21 @@ export class YahooPriceScraper {
 
     const quotes = result.quotes ?? [];
 
-    return quotes.map(q => ({
-      date: q.date,
-      open: q.open ?? 0,
-      high: q.high ?? 0,
-      low: q.low ?? 0,
-      close: q.close ?? 0,
-      volume: q.volume ?? 0
-    }));
+    return quotes
+  .filter(q =>
+    q.open != null &&
+    q.high != null &&
+    q.low != null &&
+    q.close != null &&
+    q.close > 0
+  )
+  .map(q => ({
+    date: q.date,
+    open: q.open!,
+    high: q.high!,
+    low: q.low!,
+    close: q.close!,
+    volume: q.volume ?? 0
+  }));
   }
 }
