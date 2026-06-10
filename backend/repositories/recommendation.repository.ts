@@ -1,30 +1,38 @@
-import { prisma } from '../utils/prisma';
+import { RecommendationEngine }
+  from '../engines/recommendation/recommendation.engine';
 
-export class RecommendationRepository {
-  async create(data: {
-    stockId: number;
-    scanDate: Date;
-    recommendation: string;
-    confidence: number;
-    entryPrice?: number;
-    targetPrice?: number;
-    stopLoss?: number;
-    summary?: string;
-  }) {
-    return prisma.recommendation.create({
-      data,
-    });
-  }
+import { RecommendationRepository }
+  from '../repositories/recommendation.repository';
 
-  async latest(limit = 20) {
-    return prisma.recommendation.findMany({
-      take: limit,
-      orderBy: {
-        scanDate: 'desc',
-      },
-      include: {
-        stock: true,
-      },
-    });
+export class RecommendationService {
+
+  private recommendationEngine =
+    new RecommendationEngine();
+
+  private recommendationRepository =
+    new RecommendationRepository();
+
+  async create(
+    stockId: number,
+    score: number
+  ) {
+
+    const result =
+      this.recommendationEngine
+        .getRecommendation(score);
+
+    return this.recommendationRepository
+      .create({
+        stockId,
+
+        scanDate:
+          new Date(),
+
+        recommendation:
+          result.recommendation,
+
+        confidence:
+          result.confidence
+      });
   }
 }

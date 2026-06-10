@@ -6,6 +6,7 @@ import { TechnicalAnalysisService }
 
 import { ScorePersistenceService }
   from './score-persistence.service';
+import { RecommendationService } from './recommendation.service';
 
 export class MarketScannerService {
 
@@ -17,6 +18,16 @@ export class MarketScannerService {
 
   private scorePersistenceService =
     new ScorePersistenceService();
+
+  private recommendationService =
+    new RecommendationService();
+    
+    await this.scorePersistenceService.save(...)
+
+    await this.recommendationService.create(
+      stock.id,
+      analysis.score
+    );
 
   async scan() {
 
