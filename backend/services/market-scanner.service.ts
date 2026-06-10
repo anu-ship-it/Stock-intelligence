@@ -6,7 +6,8 @@ import { TechnicalAnalysisService }
 
 import { ScorePersistenceService }
   from './score-persistence.service';
-import { RecommendationService } from './recommendation.service';
+import { RecommendationService }
+  from './recommendation.service';
 
 export class MarketScannerService {
 
@@ -22,65 +23,73 @@ export class MarketScannerService {
   private recommendationService =
     new RecommendationService();
     
-    await this.scorePersistenceService.save(...)
+    await this.scorePersistenceService
+  .save(
+    stock.symbol,
+    {
+      technicalScore:
+        analysis.score
+    }
+  );
 
-    await this.recommendationService.create(
-      stock.id,
-      analysis.score
-    );
+await this.recommendationService
+  .create(
+    stock.id,
+    analysis.score
+  );
 
   async scan() {
 
-    const stocks =
-      await this.stockRepository.getAll();
+  const stocks =
+    await this.stockRepository.getAll();
 
-    const results = [];
+  const results = [];
 
-    for (const stock of stocks) {
+  for (const stock of stocks) {
 
-      try {
+    try {
 
-        const analysis =
-          await this.technicalAnalysisService
-            .analyze(stock.symbol);
+      const analysis =
+        await this.technicalAnalysisService
+          .analyze(stock.symbol);
 
-        await this.scorePersistenceService
-          .save(stock.symbol, {
-            technicalScore:
-              analysis.score
-          });
-        results.push({
-          symbol: stock.symbol,
-          score: analysis.score,
-          currentPrice:
-            analysis.currentPrice,
-          rsi:
-            analysis.rsi,
-          ema20:
-            analysis.ema20,
-          ema50:
-            analysis.ema50,
-          macd:
-            analysis.macd,
-          signal:
-            analysis.signal,
-          histogram:
-            analysis.histogram
+      await this.scorePersistenceService
+        .save(stock.symbol, {
+          technicalScore:
+            analysis.score
         });
+      results.push({
+        symbol: stock.symbol,
+        score: analysis.score,
+        currentPrice:
+          analysis.currentPrice,
+        rsi:
+          analysis.rsi,
+        ema20:
+          analysis.ema20,
+        ema50:
+          analysis.ema50,
+        macd:
+          analysis.macd,
+        signal:
+          analysis.signal,
+        histogram:
+          analysis.histogram
+      });
 
-      } catch (error) {
+    } catch (error) {
 
-        console.error(
-          `Failed: ${stock.symbol}`,
-          error
-        );
+      console.error(
+        `Failed: ${stock.symbol}`,
+        error
+      );
 
-      }
     }
-
-    return results.sort(
-      (a, b) =>
-        b.score - a.score
-    );
   }
+
+  return results.sort(
+    (a, b) =>
+      b.score - a.score
+  );
+}
 }
