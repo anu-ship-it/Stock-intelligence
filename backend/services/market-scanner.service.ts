@@ -23,21 +23,6 @@ export class MarketScannerService {
   private recommendationService =
     new RecommendationService();
     
-    await this.scorePersistenceService
-  .save(
-    stock.symbol,
-    {
-      technicalScore:
-        analysis.score
-    }
-  );
-
-await this.recommendationService
-  .create(
-    stock.id,
-    analysis.score
-  );
-
   async scan() {
 
   const stocks =
@@ -58,6 +43,13 @@ await this.recommendationService
           technicalScore:
             analysis.score
         });
+
+      await this.recommendationService
+         .create(
+           stock.id,
+           analysis.score
+         );
+           
       results.push({
         symbol: stock.symbol,
         score: analysis.score,
