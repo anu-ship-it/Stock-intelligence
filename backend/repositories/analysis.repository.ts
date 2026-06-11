@@ -2,18 +2,32 @@ import { prisma } from '../utils/prisma';
 
 export class AnalysisRepository {
 
-  async topStocks(limit = 20) {
+  async topStocks() {
 
-    return prisma.stockScore.findMany({
-      take: limit,
+    const stocks =
+      await prisma.stock.findMany({
+        include: {
+          scores: {
+            orderBy: {
+              scanDate: 'desc'
+            },
+            take: 1
+          }
+        }
+      });
 
-      orderBy: {
-        finalScore: 'desc'
-      },
-
-      include: {
-        stock: true
-      }
-    });
+    return stocks
+      .filter(
+        stock => stock.scores.length > 0
+      )
+      .map(stock => ({
+        stock,
+        score: stock.scores[0]
+      }))
+      .sort(
+        (a, b) =>
+          b.score.finalScore -
+          a.score.finalScore
+      );
   }
 }

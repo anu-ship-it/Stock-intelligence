@@ -1,5 +1,5 @@
 import { AnalysisService }
-from '../../backend/services/analysis.service';
+  from '../../backend/services/analysis.service';
 
 async function run() {
 
@@ -15,7 +15,7 @@ async function run() {
         s.stock.symbol,
 
       score:
-        s.finalScore
+        s.score.finalScore
     }))
   );
 }
