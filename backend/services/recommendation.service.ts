@@ -24,8 +24,13 @@ export class RecommendationService {
     return this.recommendationRepository
       .create({
         stockId,
+
+        scanDate:
+          new Date(),
+
         recommendation:
           result.recommendation,
+
         confidence:
           result.confidence
       });
