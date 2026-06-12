@@ -32,10 +32,16 @@ export class FinancialIngestionService {
       );
     }
 
+    const yahooSymbol =
+      stock.yahooSymbol ??
+      stock.symbol;
+
     const data =
       await this.fundamentalsScraper
-        .getFundamentals(symbol);
-
+        .getFundamentals(
+          yahooSymbol
+        );
+        
     return this.financialRepository
       .save({
         stockId:
