@@ -12,7 +12,8 @@ async function run() {
   console.table(
     stocks.map(s => ({
       id: s.id,
-      symbol: s.symbol
+      symbol: s.symbol,
+      yahooSymbol: s.yahooSymbol
     }))
   );
 }

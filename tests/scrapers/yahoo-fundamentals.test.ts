@@ -8,7 +8,7 @@ async function run() {
 
   const data =
     await scraper.getFundamentals(
-      'AAPL'
+      'TCS.NS'
     );
 
   console.dir(
