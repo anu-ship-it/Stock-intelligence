@@ -23,20 +23,37 @@ export class YahooFundamentalsScraper {
 
     return {
       marketCap:
-        result.summaryDetail
-          ?.marketCap,
+        result.summaryDetail?.marketCap,
 
       peRatio:
-        result.summaryDetail
-          ?.trailingPE,
+        result.summaryDetail?.trailingPE,
 
       pbRatio:
-        result.defaultKeyStatistics
-          ?.priceToBook,
+        result.defaultKeyStatistics?.priceToBook,
 
       roe:
-        result.financialData
-          ?.returnOnEquity
+        result.financialData?.returnOnEquity,
+
+      revenue:
+        result.financialData?.totalRevenue,
+
+      debt:
+        result.financialData?.totalDebt,
+
+      cash:
+        result.financialData?.totalCash,
+
+      eps:
+        result.defaultKeyStatistics?.trailingEps,
+
+      revenueGrowth:
+        result.financialData?.revenueGrowth,
+
+      earningsGrowth:
+        result.financialData?.earningsGrowth,
+
+      currentRatio:
+        result.financialData?.currentRatio
     };
   }
 }

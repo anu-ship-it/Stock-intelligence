@@ -57,7 +57,19 @@ export class FinancialIngestionService {
           data.pbRatio,
 
         roe:
-          data.roe
+          data.roe,
+         
+        revenue:  
+          data.revenue,
+
+        debt:  
+          data.debt,
+
+        cash:
+          data.cash,
+
+        eps:  
+          data.eps,
       });
   }
 }
