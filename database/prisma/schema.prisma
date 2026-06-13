@@ -87,6 +87,10 @@ model FinancialMetric {
   roe         Float?
   roce        Float?
 
+  revenueGrowth  Float?
+  earningsGrowth  Float?
+  currentRatio   Float?
+
   createdAt   DateTime @default(now())
 }
 

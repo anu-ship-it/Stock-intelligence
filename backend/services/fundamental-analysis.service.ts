@@ -82,10 +82,19 @@ export class FundamentalAnalysisService {
       });
 
     const growth =
-      this.growthEngine.calculate();
+      this.growthEngine.calculate({
+        eps:
+          financials.eps ?? undefined
+      });
 
     const debt =
-      this.debtEngine.calculate();
+      this.debtEngine.calculate({
+        debt:
+          financials.debt ?? undefined,
+
+        cash:
+          financials.cash ?? undefined
+      });
 
     const score =
       this.fundamentalScoreEngine

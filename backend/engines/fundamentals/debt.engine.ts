@@ -11,11 +11,11 @@ export class DebtEngine {
     const cash =
       data.cash ?? 0;
 
-    if (cash > debt) {
+    if (cash >= debt) {
       return 100;
     }
 
-    if (cash > debt * 0.5) {
+    if (cash >= debt * 0.5) {
       return 50;
     }
 

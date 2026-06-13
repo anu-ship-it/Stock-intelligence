@@ -1,20 +1,20 @@
 export class GrowthEngine {
 
   calculate(data: {
-    revenue?: number;
     eps?: number;
   }) {
 
-    let score = 0;
+    const eps =
+      data.eps ?? 0;
 
-    if ((data.revenue ?? 0) > 0) {
-      score += 50;
+    if (eps > 20) {
+      return 100;
     }
 
-    if ((data.eps ?? 0) > 0) {
-      score += 50;
+    if (eps > 5) {
+      return 50;
     }
 
-    return score;
+    return 0;
   }
 }
