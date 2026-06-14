@@ -2,17 +2,18 @@ import { prisma } from '../utils/prisma';
 
 export class StockRepository {
   async create(data: {
-    symbol: string;
-    companyName: string;
-    marketId: number;
-    sector?: string;
-    industry?: string;
-    marketCap?: number;
-  }) {
-    return prisma.stock.create({
-      data,
-    });
-  }
+  symbol: string;
+  yahooSymbol?: string;
+  companyName: string;
+  marketId: number;
+  sector?: string;
+  industry?: string;
+  marketCap?: number;
+}) {
+  return prisma.stock.create({
+    data,
+  });
+}
 
   async findById(id: number) {
     return prisma.stock.findUnique({

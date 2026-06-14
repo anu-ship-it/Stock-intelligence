@@ -9,7 +9,10 @@ async function run() {
   const symbols = [
     'AAPL',
     'MSFT',
-    'TCS'
+    'TCS',
+    'YESBANK',
+    'SUZLON',
+    'VODAFONEIDEA'
   ];
 
   for (const symbol of symbols) {
