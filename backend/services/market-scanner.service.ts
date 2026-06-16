@@ -48,14 +48,14 @@ export class MarketScannerService {
               analysis.fundamentalScore,
 
             finalScore:
-              analysis.finalScore
+              analysis.finalScore,
 
           });
 
         await this.recommendationService
           .create(
             stock.id,
-            analysis.finalScore
+            analysis
           );
 
         results.push({
@@ -83,7 +83,7 @@ export class MarketScannerService {
 
     return results.sort(
       (a, b) =>
-        b.score - a.score
+        b.finalScore - a.finalScore
     );
   }
 }

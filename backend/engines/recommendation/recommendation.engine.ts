@@ -1,40 +1,60 @@
 export class RecommendationEngine {
 
-  getRecommendation(
-    score: number
-  ) {
+  getRecommendation(data: {
+    technicalScore: number;
+    fundamentalScore: number;
+    finalScore: number;
+  }) {
 
-    if (score >= 80) {
+    const {
+      technicalScore,
+      fundamentalScore,
+      finalScore
+    } = data;
+
+    if (
+      finalScore >= 80 &&
+      technicalScore >= 60 &&
+      fundamentalScore >= 60
+    ) {
       return {
         recommendation: 'STRONG_BUY',
         confidence: 90
       };
     }
 
-    if (score >= 60) {
+    if (
+      finalScore >= 60
+    ) {
       return {
         recommendation: 'BUY',
         confidence: 75
       };
     }
 
-    if (score >= 40) {
+    if (
+      fundamentalScore >= 80 &&
+      technicalScore < 40
+    ) {
       return {
         recommendation: 'WATCH',
-        confidence: 60
+        confidence: 70
       };
     }
 
-    if (score >= 20) {
+    if (
+      technicalScore >= 70 &&
+      fundamentalScore < 40
+    ) {
       return {
-        recommendation: 'WEAK',
-        confidence: 40
+        recommendation: 'SPECULATIVE',
+        confidence: 55
       };
     }
 
     return {
       recommendation: 'AVOID',
-      confidence: 20
+      confidence: 30
     };
   }
 }

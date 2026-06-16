@@ -499,3 +499,17 @@ Sector Rotation
 Relative Strength Ranking
 
 These features should contribute additional scoring factors without changing the core architecture.
+
+# Technical Score
+- RSI
+- EMA
+- MACD
+
+Fundamental Score
+- Valuation
+- Profitability
+- Growth
+- Debt
+
+Final Score
+= (Technical + Fundamental) / 2

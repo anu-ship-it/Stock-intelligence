@@ -16,6 +16,7 @@ export class ScorePersistenceService {
       fundamentalScore?: number;
       sentimentScore?: number;
       riskScore?: number;
+      finalScore?: number;
     }
   ) {
 
@@ -48,6 +49,7 @@ export class ScorePersistenceService {
         score.riskScore ?? 0,
 
       finalScore:
+        score.finalScore ??
         score.technicalScore
     });
   }

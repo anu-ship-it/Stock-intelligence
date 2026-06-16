@@ -13,13 +13,19 @@ export class RecommendationService {
     new RecommendationRepository();
 
   async create(
-    stockId: number,
-    score: number
-  ) {
+  stockId: number,
+  analysis: {
+    technicalScore: number;
+    fundamentalScore: number;
+    finalScore: number;
+  }
+) {
 
     const result =
-      this.recommendationEngine
-        .getRecommendation(score);
+  this.recommendationEngine
+    .getRecommendation(
+      analysis
+    );
 
     return this.recommendationRepository
       .create({
