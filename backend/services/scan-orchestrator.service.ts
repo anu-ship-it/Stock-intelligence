@@ -10,6 +10,10 @@ import { FinancialIngestionService }
 import { MarketScannerService }
   from './market-scanner.service';
 
+import { ScanHistoryRepository }
+  from '../repositories/scan-history.repository';
+  
+
 export class ScanOrchestratorService {
 
   private stockRepository =
@@ -24,31 +28,74 @@ export class ScanOrchestratorService {
   private marketScannerService =
     new MarketScannerService();
 
+  private scanHistoryRepository =
+  new ScanHistoryRepository();  
+
   async run() {
 
-    const stocks =
-      await this.stockRepository.getAll();
+  const stocks =
+    await this.stockRepository.getAll();
 
-    for (const stock of stocks) {
+  const scan =
+    await this.scanHistoryRepository
+      .create({
+        startedAt:
+          new Date(),
 
-      try {
+        totalStocks:
+          stocks.length,
 
-        await this.priceIngestionService
-          .ingest(stock.symbol);
+        successfulStocks: 0,
 
-        await this.financialIngestionService
-          .ingest(stock.symbol);
+        failedStocks: 0,
 
-      } catch (error) {
+        status: 'RUNNING'
+      });
 
-        console.error(
-          `Ingestion failed: ${stock.symbol}`,
-          error
-        );
-      }
+  let successfulStocks = 0;
+  let failedStocks = 0;
+
+  for (const stock of stocks) {
+
+    try {
+
+      await this.priceIngestionService
+        .ingest(stock.symbol);
+
+      await this.financialIngestionService
+        .ingest(stock.symbol);
+
+      successfulStocks++;
+
+    } catch (error) {
+
+      failedStocks++;
+
+      console.error(
+        `Ingestion failed: ${stock.symbol}`,
+        error
+      );
     }
-
-    return this.marketScannerService
-      .scan();
   }
-}
+
+  const results =
+    await this.marketScannerService
+      .scan();
+
+  await this.scanHistoryRepository
+    .complete(
+      scan.id,
+      {
+        completedAt:
+          new Date(),
+
+        successfulStocks,
+
+        failedStocks,
+
+        status: 'COMPLETED'
+      }
+    );
+
+  return results;
+  }}
