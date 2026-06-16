@@ -7,18 +7,24 @@ async function run() {
     new FinancialRepository();
 
   const result =
-    await repo.save({
-      stockId: 2,
+  await repo.save({
+    stockId: 2,
 
-      reportDate:
-        new Date(),
+    reportDate:
+      new Date(),
 
-      peRatio: 35.54,
+    peRatio: 35.54,
 
-      pbRatio: 40.39,
+    pbRatio: 40.39,
 
-      roe: 1.41
-    });
+    roe: 1.41,
+
+    revenueGrowth: 0.16,
+
+    earningGrowth: 0.21,
+
+    currentRatio: 1.07
+  });
 
   console.dir(
     result,

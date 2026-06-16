@@ -83,8 +83,11 @@ export class FundamentalAnalysisService {
 
     const growth =
       this.growthEngine.calculate({
-        eps:
-          financials.eps ?? undefined
+        revenueGrowth:
+          financials.revenueGrowth ?? undefined,
+
+        earningGrowth:
+          financials.earningGrowth ?? undefined
       });
 
     const debt =
@@ -93,7 +96,10 @@ export class FundamentalAnalysisService {
           financials.debt ?? undefined,
 
         cash:
-          financials.cash ?? undefined
+          financials.cash ?? undefined,
+
+        currentRatio:
+          financials.currentRatio ?? undefined
       });
 
     const score =

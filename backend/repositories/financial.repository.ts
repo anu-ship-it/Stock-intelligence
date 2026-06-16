@@ -3,24 +3,28 @@ import { prisma } from '../utils/prisma';
 export class FinancialRepository {
 
   async save(data: {
-    stockId: number;
+  stockId: number;
 
-    reportDate: Date;
+  reportDate: Date;
 
-    revenue?: number;
-    netIncome?: number;
+  revenue?: number;
+  netIncome?: number;
 
-    debt?: number;
-    cash?: number;
+  debt?: number;
+  cash?: number;
 
-    eps?: number;
+  eps?: number;
 
-    peRatio?: number;
-    pbRatio?: number;
+  peRatio?: number;
+  pbRatio?: number;
 
-    roe?: number;
-    roce?: number;
-  }) {
+  roe?: number;
+  roce?: number;
+
+  revenueGrowth?: number;
+  earningGrowth?: number;
+  currentRatio?: number;
+}) {
 
     return prisma.financialMetric.create({
       data

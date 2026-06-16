@@ -41,7 +41,7 @@ export class FinancialIngestionService {
         .getFundamentals(
           yahooSymbol
         );
-        
+
     return this.financialRepository
       .save({
         stockId:
@@ -58,18 +58,27 @@ export class FinancialIngestionService {
 
         roe:
           data.roe,
-         
-        revenue:  
+
+        revenue:
           data.revenue,
 
-        debt:  
+        debt:
           data.debt,
 
         cash:
           data.cash,
 
-        eps:  
+        eps:
           data.eps,
+
+        revenueGrowth:
+          data.revenueGrowth,
+
+        earningGrowth:
+          data.earningsGrowth,
+
+        currentRatio:
+          data.currentRatio
       });
   }
 }
