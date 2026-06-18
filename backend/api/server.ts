@@ -4,6 +4,9 @@ import express
 import stocksRoutes
   from './routes/stocks.routes';
 
+import recommendationsRoutes
+  from './routes/recommendations.routes';  
+
 const app =
   express();
 
@@ -14,6 +17,11 @@ app.use(
 app.use(
   '/api/stocks',
   stocksRoutes
+);
+
+app.use(
+  '/api/recommendations',
+  recommendationsRoutes
 );
 
 const PORT =
