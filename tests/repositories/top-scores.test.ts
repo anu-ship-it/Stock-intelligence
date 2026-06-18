@@ -7,17 +7,23 @@ async function run() {
     new AnalysisRepository();
 
   const result =
-    await repo.topStocks(10);
+    await repo.topStocks();
 
   console.table(
-    result.map(r => ({
-      symbol:
-        r.stock.symbol,
+  result.map(r => ({
+    symbol:
+      r.stock.symbol,
 
-      finalScore:
-        r.finalScore
-    }))
-  );
+    finalScore:
+      r.score.finalScore,
+
+    technicalScore:
+      r.score.technicalScore,
+
+    fundamentalScore:
+      r.score.fundamentalScore
+  }))
+);
 }
 
 run();
