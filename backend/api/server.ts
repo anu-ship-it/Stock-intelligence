@@ -7,6 +7,10 @@ import stocksRoutes
 import recommendationsRoutes
   from './routes/recommendations.routes';  
 
+import scansRoutes
+  from './routes/scans.routes';
+
+
 const app =
   express();
 
@@ -22,6 +26,11 @@ app.use(
 app.use(
   '/api/recommendations',
   recommendationsRoutes
+);
+
+app.use(
+  '/api/scan',
+  scansRoutes
 );
 
 const PORT =
