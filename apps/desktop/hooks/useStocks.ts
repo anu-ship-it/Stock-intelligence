@@ -20,23 +20,21 @@ export function useStocks() {
 
   useEffect(() => {
 
-  console.log(
-    'useStocks running'
-  );
+  console.log('useStocks started');
 
   async function load() {
 
-    console.log(
-      'load started'
-    );
+    console.log('load() called');
 
     try {
+
+      console.log('before API');
 
       const data =
         await getTopStocks();
 
       console.log(
-        'data received',
+        'after API',
         data
       );
 
@@ -45,7 +43,7 @@ export function useStocks() {
     } catch (err) {
 
       console.error(
-        'hook error',
+        'FETCH ERROR',
         err
       );
 
@@ -55,8 +53,11 @@ export function useStocks() {
 
     } finally {
 
-      setLoading(false);
+      console.log(
+        'loading finished'
+      );
 
+      setLoading(false);
     }
   }
 

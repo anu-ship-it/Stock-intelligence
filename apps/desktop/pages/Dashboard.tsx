@@ -1,11 +1,9 @@
-console.log(
-  'Dashboard rendered'
-);
+
 import { useStocks }
   from '../hooks/useStocks';
 
 export default function Dashboard() {
-
+console.log('Dashboard rendered');
   const {
   stocks,
   loading,
