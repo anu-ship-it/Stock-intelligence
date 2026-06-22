@@ -1,11 +1,13 @@
 import express
   from 'express';
 
+import cors from 'cors';
+
 import stocksRoutes
   from './routes/stocks.routes';
 
 import recommendationsRoutes
-  from './routes/recommendations.routes';  
+  from './routes/recommendations.routes';
 
 import scansRoutes
   from './routes/scans.routes';
@@ -13,6 +15,8 @@ import scansRoutes
 
 const app =
   express();
+
+app.use(cors()) ; 
 
 app.use(
   express.json()
