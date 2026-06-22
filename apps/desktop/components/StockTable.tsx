@@ -1,47 +1,60 @@
-type Props = {
-  stocks: any[];
+type Stock = {
+  symbol: string;
+  technicalScore: number;
+  fundamentalScore: number;
+  finalScore: number;
 };
 
 export default function StockTable({
   stocks
-}: Props) {
+}: {
+  stocks: Stock[];
+}) {
 
   return (
 
-    <table>
+    <table
+      border={1}
+      cellPadding={10}
+    >
 
       <thead>
-
         <tr>
           <th>Symbol</th>
-          <th>Score</th>
+          <th>Technical</th>
+          <th>Fundamental</th>
+          <th>Final</th>
         </tr>
-
       </thead>
 
       <tbody>
 
-        {
-          stocks.map(stock => (
+        {stocks.map(stock => (
 
-            <tr key={stock.symbol}>
+          <tr key={stock.symbol}>
 
-              <td>
-                {stock.symbol}
-              </td>
+            <td>
+              {stock.symbol}
+            </td>
 
-              <td>
-                {stock.finalScore}
-              </td>
+            <td>
+              {stock.technicalScore}
+            </td>
 
-            </tr>
+            <td>
+              {stock.fundamentalScore}
+            </td>
 
-          ))
-        }
+            <td>
+              {stock.finalScore}
+            </td>
+
+          </tr>
+
+        ))}
 
       </tbody>
 
     </table>
-
   );
 }

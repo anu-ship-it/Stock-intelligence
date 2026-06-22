@@ -1,22 +1,24 @@
-
 import { useStocks }
   from '../hooks/useStocks';
 
+import StockTable
+  from '../components/StockTable';
+
 export default function Dashboard() {
-console.log('Dashboard rendered');
+
   const {
-  stocks,
-  loading,
-  error
-} = useStocks();
+    stocks,
+    loading,
+    error
+  } = useStocks();
 
-if (loading) {
-  return <div>Loading...</div>;
-}
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-if (error) {
-  return <div>{error}</div>;
-}
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
 
@@ -26,15 +28,9 @@ if (error) {
         PennyScope
       </h1>
 
-      <pre>
-        {
-          JSON.stringify(
-            stocks,
-            null,
-            2
-          )
-        }
-      </pre>
+      <StockTable
+        stocks={stocks}
+      />
 
     </div>
   );

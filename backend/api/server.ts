@@ -16,6 +16,7 @@ import scansRoutes
 const app =
   express();
 
+console.log('SERVER VERSION 2'); 
 app.use(cors()) ; 
 
 app.use(
