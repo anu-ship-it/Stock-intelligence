@@ -4,6 +4,10 @@ import { useStocks }
 import StockTable
   from '../components/StockTable';
 
+import {
+  useScan
+} from '../hooks/useScan';  
+
 export default function Dashboard() {
 
   const {
@@ -11,6 +15,7 @@ export default function Dashboard() {
     loading,
     error
   } = useStocks();
+  
 
   if (loading) {
     return <div>Loading...</div>;
