@@ -20,35 +20,49 @@ export function useStocks() {
 
   useEffect(() => {
 
-    async function load() {
+  console.log(
+    'useStocks running'
+  );
 
-      try {
+  async function load() {
 
-        const data =
-          await getTopStocks();
+    console.log(
+      'load started'
+    );
 
-        console.log(data);
+    try {
 
-        setStocks(data);
+      const data =
+        await getTopStocks();
 
-      } catch (err) {
+      console.log(
+        'data received',
+        data
+      );
 
-        console.error(err);
+      setStocks(data);
 
-        setError(
-          String(err)
-        );
+    } catch (err) {
 
-      } finally {
+      console.error(
+        'hook error',
+        err
+      );
 
-        setLoading(false);
+      setError(
+        String(err)
+      );
 
-      }
+    } finally {
+
+      setLoading(false);
+
     }
+  }
 
-    load();
+  load();
 
-  }, []);
+}, []);
 
   return {
     stocks,

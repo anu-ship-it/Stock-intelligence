@@ -1,3 +1,6 @@
+console.log(
+  'Dashboard rendered'
+);
 import { useStocks }
   from '../hooks/useStocks';
 
