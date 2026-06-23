@@ -12,8 +12,7 @@ export default function StockDetail() {
     useParams();
 
   const {
-    stock,
-    analysis,
+    data,
     loading
   } =
     useStockDetail(
@@ -24,6 +23,15 @@ export default function StockDetail() {
     return <div>Loading...</div>;
   }
 
+  const financial =
+    data.financials?.[0];
+
+  const score =
+    data.scores?.[0];
+
+  const recommendation =
+    data.recommendations?.[0];
+
   return (
 
     <div
@@ -33,35 +41,93 @@ export default function StockDetail() {
     >
 
       <h1>
-        {stock.companyName}
+        {data.companyName}
       </h1>
 
       <h2>
-        {stock.symbol}
+        {data.symbol}
       </h2>
+
+      <p>
+        Yahoo Symbol:
+        {' '}
+        {data.yahooSymbol}
+      </p>
 
       <hr />
 
-      <h3>
+      <h2>
+        Recommendation
+      </h2>
+
+      <p>
+        {recommendation?.recommendation}
+      </p>
+
+      <p>
+        Confidence:
+        {' '}
+        {recommendation?.confidence}%
+      </p>
+
+      <hr />
+
+      <h2>
         Analysis
-      </h3>
+      </h2>
 
       <p>
         Technical Score:
         {' '}
-        {analysis.technicalScore}
+        {score?.technicalScore}
       </p>
 
       <p>
         Fundamental Score:
         {' '}
-        {analysis.fundamentalScore}
+        {score?.fundamentalScore}
       </p>
 
       <p>
         Final Score:
         {' '}
-        {analysis.finalScore}
+        {score?.finalScore}
+      </p>
+
+      <hr />
+
+      <h2>
+        Financial Metrics
+      </h2>
+
+      <p>
+        PE Ratio:
+        {' '}
+        {financial?.peRatio}
+      </p>
+
+      <p>
+        PB Ratio:
+        {' '}
+        {financial?.pbRatio}
+      </p>
+
+      <p>
+        ROE:
+        {' '}
+        {financial?.roe}
+      </p>
+
+      <p>
+        EPS:
+        {' '}
+        {financial?.eps}
+      </p>
+
+      <p>
+        Revenue Growth:
+        {' '}
+        {financial?.revenueGrowth}
       </p>
 
     </div>

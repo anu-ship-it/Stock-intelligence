@@ -7,6 +7,9 @@ import { StockRepository }
 import { CombinedAnalysisService }
     from '../../services/combined-analysis.service';
 
+import { StockOverviewRepository }
+    from '../../repositories/stock-overview.repository';
+
 export class StocksController {
 
     private analysisRepository =
@@ -17,6 +20,33 @@ export class StocksController {
 
     private combinedAnalysisService =
         new CombinedAnalysisService();
+
+    private stockOverviewRepository =
+        new StockOverviewRepository();
+
+    async overview(
+        req: any,
+        res: any
+    ) {
+
+        const symbol =
+            req.params.symbol;
+
+        const result =
+            await this.stockOverviewRepository
+                .get(symbol);
+
+        if (!result) {
+
+            return res.status(404)
+                .json({
+                    error:
+                        'Stock not found'
+                });
+        }
+
+        res.json(result);
+    }
 
     async topStocks(
         req: any,

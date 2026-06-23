@@ -1,23 +1,17 @@
-export async function getStock(
+export async function getOverview(
   symbol: string
 ) {
 
   const response =
     await fetch(
-      `http://localhost:3000/api/stocks/${symbol}`
+      `http://localhost:3000/api/stocks/${symbol}/overview`
     );
 
-  return response.json();
-}
-
-export async function getAnalysis(
-  symbol: string
-) {
-
-  const response =
-    await fetch(
-      `http://localhost:3000/api/stocks/${symbol}/analysis`
+  if (!response.ok) {
+    throw new Error(
+      `HTTP ${response.status}`
     );
+  }
 
   return response.json();
 }

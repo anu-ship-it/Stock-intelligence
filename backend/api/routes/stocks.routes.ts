@@ -33,6 +33,17 @@ router.get(
             res
         )
 );
+router.get(
+  '/:symbol/overview',
+  (
+    req,
+    res
+  ) =>
+    controller.overview(
+      req,
+      res
+    )
+);
 
 router.get(
     '/:symbol',

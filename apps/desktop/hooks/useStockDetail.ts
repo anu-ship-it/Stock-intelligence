@@ -4,18 +4,14 @@ import {
 } from 'react';
 
 import {
-  getStock,
-  getAnalysis
+  getOverview
 } from '../api/stock-detail.api';
 
 export function useStockDetail(
   symbol: string
 ) {
 
-  const [stock, setStock] =
-    useState<any>(null);
-
-  const [analysis, setAnalysis] =
+  const [data, setData] =
     useState<any>(null);
 
   const [loading, setLoading] =
@@ -25,17 +21,12 @@ export function useStockDetail(
 
     async function load() {
 
-      const stockData =
-        await getStock(symbol);
+      const result =
+        await getOverview(
+          symbol
+        );
 
-      const analysisData =
-        await getAnalysis(symbol);
-
-      setStock(stockData);
-
-      setAnalysis(
-        analysisData
-      );
+      setData(result);
 
       setLoading(false);
     }
@@ -45,8 +36,7 @@ export function useStockDetail(
   }, [symbol]);
 
   return {
-    stock,
-    analysis,
+    data,
     loading
   };
 }
