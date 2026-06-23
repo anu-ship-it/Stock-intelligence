@@ -17,7 +17,6 @@ export default function Dashboard() {
 
   const { recommendations } = useRecommendations();
 
-  const { recommendations } = useRecommendations();
 
   async function handleScan() {
     try {
