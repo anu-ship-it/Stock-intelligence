@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 type Stock = {
   symbol: string;
   technicalScore: number;
@@ -5,19 +7,9 @@ type Stock = {
   finalScore: number;
 };
 
-export default function StockTable({
-  stocks
-}: {
-  stocks: Stock[];
-}) {
-
+export default function StockTable({ stocks }: { stocks: Stock[] }) {
   return (
-
-    <table
-      border={1}
-      cellPadding={10}
-    >
-
+    <table border={1} cellPadding={10}>
       <thead>
         <tr>
           <th>Symbol</th>
@@ -28,33 +20,20 @@ export default function StockTable({
       </thead>
 
       <tbody>
-
-        {stocks.map(stock => (
-
+        {stocks.map((stock) => (
           <tr key={stock.symbol}>
-
             <td>
-              {stock.symbol}
+              <Link to={`/stocks/${stock.symbol}`}>{stock.symbol}</Link>
             </td>
 
-            <td>
-              {stock.technicalScore}
-            </td>
+            <td>{stock.technicalScore}</td>
 
-            <td>
-              {stock.fundamentalScore}
-            </td>
+            <td>{stock.fundamentalScore}</td>
 
-            <td>
-              {stock.finalScore}
-            </td>
-
+            <td>{stock.finalScore}</td>
           </tr>
-
         ))}
-
       </tbody>
-
     </table>
   );
 }
