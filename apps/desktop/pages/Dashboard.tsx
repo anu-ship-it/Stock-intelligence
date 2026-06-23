@@ -1,44 +1,31 @@
-import { useStocks }
-  from '../hooks/useStocks';
+import { useStocks } from "../hooks/useStocks";
 
-import { useScan }
-  from '../hooks/useScan';
+import { useScan } from "../hooks/useScan";
 
-import StockTable
-  from '../components/StockTable';
+import StockTable from "../components/StockTable";
+
+import RecommendationCard from "../components/RecommendationCard";
+
+import { useRecommendations } from "../hooks/useRecommendations";
 
 export default function Dashboard() {
+  const { stocks, loading, error } = useStocks();
 
-  const {
-    stocks,
-    loading,
-    error
-  } = useStocks();
+  const { scan, loading: scanLoading } = useScan();
 
-  const {
-    scan,
-    loading: scanLoading
-  } = useScan();
+  const { recommendations } = useRecommendations();
 
   async function handleScan() {
-
     try {
-
       await scan();
 
-      alert(
-        'Market Scan Completed'
-      );
+      alert("Market Scan Completed");
 
       window.location.reload();
-
     } catch (error) {
-
       console.error(error);
 
-      alert(
-        'Market Scan Failed'
-      );
+      alert("Market Scan Failed");
     }
   }
 
@@ -51,37 +38,28 @@ export default function Dashboard() {
   }
 
   return (
-
     <div
       style={{
-        padding: '20px'
+        padding: "20px",
       }}
     >
-
-      <h1>
-        PennyScope
-      </h1>
+      <h1>PennyScope</h1>
 
       <button
         onClick={handleScan}
         disabled={scanLoading}
         style={{
-          marginBottom: '20px',
-          padding: '10px 16px',
-          cursor: 'pointer'
+          marginBottom: "20px",
+          padding: "10px 16px",
+          cursor: "pointer",
         }}
       >
-        {
-          scanLoading
-            ? 'Scanning...'
-            : 'Run Market Scan'
-        }
+        {scanLoading ? "Scanning..." : "Run Market Scan"}
       </button>
 
-      <StockTable
-        stocks={stocks}
-      />
+      <StockTable stocks={stocks} />
 
+      <RecommendationCard recommendations={recommendations} />
     </div>
   );
 }
