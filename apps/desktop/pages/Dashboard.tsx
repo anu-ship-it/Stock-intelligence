@@ -8,10 +8,14 @@ import RecommendationCard from "../components/RecommendationCard";
 
 import { useRecommendations } from "../hooks/useRecommendations";
 
+import MetricsCards from "../components/MetricsCards";
+
 export default function Dashboard() {
   const { stocks, loading, error } = useStocks();
 
   const { scan, loading: scanLoading } = useScan();
+
+  const { recommendations } = useRecommendations();
 
   const { recommendations } = useRecommendations();
 
@@ -29,6 +33,12 @@ export default function Dashboard() {
     }
   }
 
+  const stocksTracked = stocks.length;
+
+  const topPick = stocks.length > 0 ? stocks[0].symbol : "N/A";
+
+  const recommendationCount = recommendations.length;
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -44,6 +54,12 @@ export default function Dashboard() {
       }}
     >
       <h1>PennyScope</h1>
+
+      <MetricsCards
+        stocksTracked={stocksTracked}
+        topPick={topPick}
+        recommendations={recommendationCount}
+      />
 
       <button
         onClick={handleScan}
