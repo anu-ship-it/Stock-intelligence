@@ -32,4 +32,41 @@ export class RecommendationRepository {
       }
     });
   }
+
+  async latestPerStock() {
+
+    const recommendations =
+      await prisma.recommendation.findMany({
+
+        orderBy: {
+          scanDate: 'desc'
+        },
+
+        include: {
+          stock: true
+        }
+      });
+
+    const seen =
+      new Set<string>();
+
+    return recommendations.filter(
+      item => {
+
+        if (
+          seen.has(
+            item.stock.symbol
+          )
+        ) {
+          return false;
+        }
+
+        seen.add(
+          item.stock.symbol
+        );
+
+        return true;
+      }
+    );
+  }
 }

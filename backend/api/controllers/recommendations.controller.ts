@@ -12,8 +12,8 @@ export class RecommendationsController {
   ) {
 
     const recommendations =
-      await this.recommendationRepository
-        .latest();
+  await this.recommendationRepository
+    .latestPerStock();
 
     res.json(
       recommendations.map(item => ({
