@@ -5,24 +5,15 @@ type Recommendation = {
 };
 
 export default function RecommendationCard({
-  recommendations
+  recommendations,
 }: {
   recommendations: Recommendation[];
 }) {
-
   return (
-
     <div>
+      <h2>Latest Recommendations</h2>
 
-      <h2>
-        Latest Recommendations
-      </h2>
-
-      <table
-        border={1}
-        cellPadding={10}
-      >
-
+      <table border={1} cellPadding={10}>
         <thead>
           <tr>
             <th>Symbol</th>
@@ -32,33 +23,17 @@ export default function RecommendationCard({
         </thead>
 
         <tbody>
+          {recommendations.map((item, index) => (
+            <tr key={index}>
+              <td>{item.symbol}</td>
 
-          {recommendations.map(item => (
+              <td>{item.recommendation}</td>
 
-            <tr
-              key={`${item.symbol}-${item.recommendation}`}
-            >
-
-              <td>
-                {item.symbol}
-              </td>
-
-              <td>
-                {item.recommendation}
-              </td>
-
-              <td>
-                {item.confidence}%
-              </td>
-
+              <td>{item.confidence}%</td>
             </tr>
-
           ))}
-
         </tbody>
-
       </table>
-
     </div>
   );
 }
