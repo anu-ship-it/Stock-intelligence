@@ -6,6 +6,12 @@ import {
   useStockDetail
 } from '../hooks/useStockDetail';
 
+import MetricCard
+  from '../components/MetricCard';
+
+import RecommendationCard
+  from '../components/RecommendationTable';
+
 export default function StockDetail() {
 
   const { symbol } =
@@ -36,7 +42,7 @@ export default function StockDetail() {
 
     <div
       style={{
-        padding: '20px'
+        padding: '24px'
       }}
     >
 
@@ -44,91 +50,100 @@ export default function StockDetail() {
         {data.companyName}
       </h1>
 
-      <h2>
-        {data.symbol}
-      </h2>
-
       <p>
-        Yahoo Symbol:
-        {' '}
         {data.yahooSymbol}
       </p>
 
-      <hr />
+      <RecommendationCard
+        recommendation={
+          recommendation?.recommendation
+        }
+        confidence={
+          recommendation?.confidence
+        }
+      />
 
-      <h2>
-        Recommendation
-      </h2>
+      <div
+        style={{
+          display: 'flex',
+          gap: '16px',
+          marginTop: '20px',
+          flexWrap: 'wrap'
+        }}
+      >
 
-      <p>
-        {recommendation?.recommendation}
-      </p>
+        <MetricCard
+          title="Technical Score"
+          value={
+            score?.technicalScore
+          }
+        />
 
-      <p>
-        Confidence:
-        {' '}
-        {recommendation?.confidence}%
-      </p>
+        <MetricCard
+          title="Fundamental Score"
+          value={
+            score?.fundamentalScore
+          }
+        />
 
-      <hr />
+        <MetricCard
+          title="Final Score"
+          value={
+            score?.finalScore
+          }
+        />
 
-      <h2>
-        Analysis
-      </h2>
+      </div>
 
-      <p>
-        Technical Score:
-        {' '}
-        {score?.technicalScore}
-      </p>
-
-      <p>
-        Fundamental Score:
-        {' '}
-        {score?.fundamentalScore}
-      </p>
-
-      <p>
-        Final Score:
-        {' '}
-        {score?.finalScore}
-      </p>
-
-      <hr />
-
-      <h2>
+      <h2
+        style={{
+          marginTop: '30px'
+        }}
+      >
         Financial Metrics
       </h2>
 
-      <p>
-        PE Ratio:
-        {' '}
-        {financial?.peRatio}
-      </p>
+      <div
+        style={{
+          display: 'flex',
+          gap: '16px',
+          flexWrap: 'wrap'
+        }}
+      >
 
-      <p>
-        PB Ratio:
-        {' '}
-        {financial?.pbRatio}
-      </p>
+        <MetricCard
+          title="PE Ratio"
+          value={
+            financial?.peRatio ??
+            'N/A'
+          }
+        />
 
-      <p>
-        ROE:
-        {' '}
-        {financial?.roe}
-      </p>
+        <MetricCard
+          title="PB Ratio"
+          value={
+            financial?.pbRatio ??
+            'N/A'
+          }
+        />
 
-      <p>
-        EPS:
-        {' '}
-        {financial?.eps}
-      </p>
+        <MetricCard
+          title="ROE"
+          value={
+            financial?.roe ??
+            'N/A'
+          }
+        />
 
-      <p>
-        Revenue Growth:
-        {' '}
-        {financial?.revenueGrowth}
-      </p>
+        <MetricCard
+          title="EPS"
+          value={
+            financial?.eps ??
+            'N/A'
+          }
+        />
+
+      </div>
 
     </div>
   );

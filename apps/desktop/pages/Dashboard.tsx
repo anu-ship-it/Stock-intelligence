@@ -4,7 +4,7 @@ import { useScan } from "../hooks/useScan";
 
 import StockTable from "../components/StockTable";
 
-import RecommendationCard from "../components/RecommendationCard";
+import RecommendationCard from "../components/RecommendationTable";
 
 import { useRecommendations } from "../hooks/useRecommendations";
 

@@ -1,39 +1,36 @@
-type Recommendation = {
-  symbol: string;
+type Props = {
   recommendation: string;
   confidence: number;
 };
 
 export default function RecommendationCard({
-  recommendations,
-}: {
-  recommendations: Recommendation[];
-}) {
+  recommendation,
+  confidence
+}: Props) {
+
   return (
-    <div>
-      <h2>Latest Recommendations</h2>
 
-      <table border={1} cellPadding={10}>
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Recommendation</th>
-            <th>Confidence</th>
-          </tr>
-        </thead>
+    <div
+      style={{
+        border: '1px solid #ddd',
+        borderRadius: '8px',
+        padding: '20px',
+        marginBottom: '20px'
+      }}
+    >
 
-        <tbody>
-          {recommendations.map((item, index) => (
-            <tr key={index}>
-              <td>{item.symbol}</td>
+      <h2>
+        Recommendation
+      </h2>
 
-              <td>{item.recommendation}</td>
+      <h1>
+        {recommendation}
+      </h1>
 
-              <td>{item.confidence}%</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <p>
+        Confidence: {confidence}%
+      </p>
+
     </div>
   );
 }
