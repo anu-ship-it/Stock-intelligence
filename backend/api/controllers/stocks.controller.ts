@@ -52,6 +52,7 @@ export class StocksController {
         req: any,
         res: any
     ) {
+            console.log('topStocks called');
 
         const stocks =
             await this.analysisRepository

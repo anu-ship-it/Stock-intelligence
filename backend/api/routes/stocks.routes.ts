@@ -6,6 +6,7 @@ import { StocksController }
 
 const router =
     Router();
+    console.log('stocks.routes loaded');
 
 const controller =
     new StocksController();
@@ -55,6 +56,18 @@ router.get(
             req,
             res
         )
+);
+
+router.get(
+  '/test',
+  (
+    req,
+    res
+  ) => {
+    res.json({
+      success: true
+    });
+  }
 );
 
 export default router;
