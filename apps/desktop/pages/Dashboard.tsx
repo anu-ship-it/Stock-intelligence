@@ -2,13 +2,13 @@ import { useStocks } from "../hooks/useStocks";
 
 import { useScan } from "../hooks/useScan";
 
-import StockTable from "../components/StockTable";
+import StockTable from "../components/dashboard/StockTable";
 
-import RecommendationCard from "../components/RecommendationTable";
+import RecommendationCard from "../components/dashboard/RecommendationTable";
 
 import { useRecommendations } from "../hooks/useRecommendations";
 
-import MetricsCards from "../components/MetricsCards";
+import MetricsCards from "../components/dashboard/MetricsGrid";
 
 export default function Dashboard() {
   const { stocks, loading, error } = useStocks();

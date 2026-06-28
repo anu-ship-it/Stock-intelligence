@@ -2,9 +2,9 @@ import { useParams } from "react-router-dom";
 
 import { useStockDetail } from "../hooks/useStockDetail";
 
-import MetricCard from "../components/MetricCard";
+import MetricCard from "../components/common/MetricCard";
 
-import RecommendationCard from "../components/RecommendationCard";
+import RecommendationCard from "../components/stock/RecommendationCard";
 
 export default function StockDetail() {
   const { symbol } = useParams();
