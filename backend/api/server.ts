@@ -1,7 +1,8 @@
 import express
   from 'express';
 
-import cors from 'cors';
+import cors
+  from 'cors';
 
 import stocksRoutes
   from './routes/stocks.routes';
@@ -12,17 +13,34 @@ import recommendationsRoutes
 import scansRoutes
   from './routes/scans.routes';
 
-
 const app =
   express();
 
-console.log('SERVER VERSION 2'); 
-app.use(cors()) ; 
+const PORT =
+  3000;
+
+console.log('SERVER VERSION 2');
+
+app.use(cors());
 
 app.use(
   express.json()
 );
 
+// Health Check
+app.get(
+  '/health',
+  (
+    req,
+    res
+  ) => {
+    res.json({
+      ok: true
+    });
+  }
+);
+
+// Routes
 app.use(
   '/api/stocks',
   stocksRoutes
@@ -38,9 +56,7 @@ app.use(
   scansRoutes
 );
 
-const PORT =
-  3000;
-
+// Start Server
 app.listen(
   PORT,
   () => {

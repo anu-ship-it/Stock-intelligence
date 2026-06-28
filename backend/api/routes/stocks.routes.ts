@@ -1,62 +1,14 @@
 import { Router }
-    from 'express';
+  from 'express';
 
 import { StocksController }
-    from '../controllers/stocks.controller';
+  from '../controllers/stocks.controller';
 
 const router =
-    Router();
-    console.log('stocks.routes loaded');
+  Router();
 
 const controller =
-    new StocksController();
-
-router.get(
-    '/top',
-    (
-        req,
-        res
-    ) =>
-        controller.topStocks(
-            req,
-            res
-        )
-);
-
-router.get(
-    '/:symbol/analysis',
-    (
-        req,
-        res
-    ) =>
-        controller.analysis(
-            req,
-            res
-        )
-);
-router.get(
-  '/:symbol/overview',
-  (
-    req,
-    res
-  ) =>
-    controller.overview(
-      req,
-      res
-    )
-);
-
-router.get(
-    '/:symbol',
-    (
-        req,
-        res
-    ) =>
-        controller.stockBySymbol(
-            req,
-            res
-        )
-);
+  new StocksController();
 
 router.get(
   '/test',
@@ -70,5 +22,52 @@ router.get(
   }
 );
 
-export default router;
+router.get(
+  '/top',
+  (
+    req,
+    res
+  ) =>
+    controller.topStocks(
+      req,
+      res
+    )
+);
 
+router.get(
+  '/:symbol/analysis',
+  (
+    req,
+    res
+  ) =>
+    controller.analysis(
+      req,
+      res
+    )
+);
+
+router.get(
+  '/:symbol/overview',
+  (
+    req,
+    res
+  ) =>
+    controller.overview(
+      req,
+      res
+    )
+);
+
+router.get(
+  '/:symbol',
+  (
+    req,
+    res
+  ) =>
+    controller.stockBySymbol(
+      req,
+      res
+    )
+);
+
+export default router;
