@@ -2,13 +2,22 @@ import {
   BrowserRouter,
   Routes,
   Route
-} from 'react-router-dom';
+} from "react-router-dom";
+
+import AppLayout
+  from "../layouts/AppLayout";
 
 import Dashboard
-  from '../pages/Dashboard';
+  from "../pages/Dashboard";
 
 import StockDetail
-  from '../pages/StockDetail';
+  from "../pages/StockDetail";
+
+import Reports
+  from "../pages/Reports";
+
+import Settings
+  from "../pages/Settings";
 
 export default function App() {
 
@@ -16,21 +25,36 @@ export default function App() {
 
     <BrowserRouter>
 
-      <Routes>
+      <AppLayout>
 
-        <Route
-          path="/"
-          element={<Dashboard />}
-        />
+        <Routes>
 
-        <Route
-          path="/stocks/:symbol"
-          element={<StockDetail />}
-        />
+          <Route
+            path="/"
+            element={<Dashboard />}
+          />
 
-      </Routes>
+          <Route
+            path="/stocks/:symbol"
+            element={<StockDetail />}
+          />
+
+          <Route
+            path="/reports"
+            element={<Reports />}
+          />
+
+          <Route
+            path="/settings"
+            element={<Settings />}
+          />
+
+        </Routes>
+
+      </AppLayout>
 
     </BrowserRouter>
 
   );
+
 }
