@@ -1,5 +1,5 @@
 import MetricCard
-  from '../common/MetricCard';
+  from "../common/MetricCard";
 
 type Props = {
   stocksTracked: number;
@@ -10,20 +10,10 @@ type Props = {
 export default function MetricsGrid({
   stocksTracked,
   topPick,
-  recommendations
+  recommendations,
 }: Props) {
-
   return (
-
-    <div
-      style={{
-        display: 'flex',
-        gap: '20px',
-        marginBottom: '20px',
-        flexWrap: 'wrap'
-      }}
-    >
-
+    <div className="grid grid-cols-3 gap-6">
       <MetricCard
         title="Stocks Tracked"
         value={stocksTracked}
@@ -38,8 +28,6 @@ export default function MetricsGrid({
         title="Recommendations"
         value={recommendations}
       />
-
     </div>
-
   );
 }

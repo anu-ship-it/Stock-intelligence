@@ -1,62 +1,36 @@
 type Props = {
   title: string;
   value: string | number;
-  subtitle?: string;
 };
 
 export default function MetricCard({
   title,
   value,
-  subtitle
 }: Props) {
-
   return (
-
     <div
-      style={{
-        border: "1px solid #dcdcdc",
-        borderRadius: "10px",
-        padding: "18px",
-        minWidth: "190px",
-        background: "#fff",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
-      }}
+      className="
+        flex-1
+        min-w-[220px]
+        rounded-2xl
+        border
+        border-slate-800
+        bg-slate-900
+        p-6
+        shadow-lg
+        transition-all
+        duration-200
+        hover:-translate-y-1
+        hover:border-blue-500
+      "
     >
-
-      <div
-        style={{
-          fontSize: "14px",
-          color: "#666",
-          marginBottom: "8px"
-        }}
-      >
+      <p className="text-sm font-medium text-slate-400">
         {title}
-      </div>
+      </p>
 
-      <div
-        style={{
-          fontSize: "30px",
-          fontWeight: 700
-        }}
-      >
+      <h2 className="mt-4 text-4xl font-bold text-white">
         {value}
-      </div>
-
-      {subtitle && (
-
-        <div
-          style={{
-            marginTop: "10px",
-            fontSize: "13px",
-            color: "#888"
-          }}
-        >
-          {subtitle}
-        </div>
-
-      )}
-
+      </h2>
     </div>
-
   );
 }

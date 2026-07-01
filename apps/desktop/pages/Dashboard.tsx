@@ -1,80 +1,123 @@
 import { useStocks } from "../hooks/useStocks";
 
-import { useScan } from "../hooks/useScan";
+import MetricsGrid
+  from "../components/dashboard/MetricsGrid";
 
-import StockTable from "../components/dashboard/StockTable";
+import StockTable
+  from "../components/dashboard/StockTable";
 
-import RecommendationCard from "../components/dashboard/RecommendationTable";
+import RecommendationTable
+  from "../components/dashboard/RecommendationTable";
 
-import { useRecommendations } from "../hooks/useRecommendations";
+import PageHeader
+  from "../components/common/PageHeader";
 
-import MetricsCards from "../components/dashboard/MetricsGrid";
+import SectionCard
+  from "../components/common/SectionCard";
+
+import { useRecommendations }
+  from "../hooks/useRecommendations";
+
+import { useScan }
+  from "../hooks/useScan";
 
 export default function Dashboard() {
-  const { stocks, loading, error } = useStocks();
 
-  const { scan, loading: scanLoading } = useScan();
+  const {
+    stocks,
+    loading,
+    error
+  } = useStocks();
 
-  const { recommendations } = useRecommendations();
+  const {
+    recommendations
+  } = useRecommendations();
 
-
-  async function handleScan() {
-    try {
-      await scan();
-
-      alert("Market Scan Completed");
-
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-
-      alert("Market Scan Failed");
-    }
-  }
-
-  const stocksTracked = stocks.length;
-
-  const topPick = stocks.length > 0 ? stocks[0].symbol : "N/A";
-
-  const recommendationCount = recommendations.length;
+  const {
+    loading: scanning,
+    runScan
+  } = useScan();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="text-slate-300">
+        Loading Dashboard...
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="text-red-400">
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div
-      style={{
-        padding: "20px",
-      }}
-    >
-      <h1>PennyScope</h1>
 
-      <MetricsCards
-        stocksTracked={stocksTracked}
-        topPick={topPick}
-        recommendations={recommendationCount}
+    <div className="space-y-8">
+
+      <PageHeader
+        title="Dashboard"
+        subtitle="Monitor your market intelligence and AI recommendations."
       />
 
-      <button
-        onClick={handleScan}
-        disabled={scanLoading}
-        style={{
-          marginBottom: "20px",
-          padding: "10px 16px",
-          cursor: "pointer",
-        }}
+      <MetricsGrid
+        stocksTracked={stocks.length}
+        topPick={stocks[0]?.symbol ?? "-"}
+        recommendations={recommendations.length}
+      />
+
+      <SectionCard
+        title="Top Ranked Stocks"
       >
-        {scanLoading ? "Scanning..." : "Run Market Scan"}
-      </button>
 
-      <StockTable stocks={stocks} />
+        <StockTable
+          stocks={stocks}
+        />
 
-      <RecommendationCard recommendations={recommendations} />
+      </SectionCard>
+
+      <SectionCard
+        title="Latest Recommendations"
+      >
+
+        <RecommendationTable
+          recommendations={recommendations}
+        />
+
+      </SectionCard>
+
+      <div>
+
+        <button
+          onClick={runScan}
+          disabled={scanning}
+          className="
+            rounded-xl
+            bg-blue-600
+            px-6
+            py-3
+            font-semibold
+            transition
+            hover:bg-blue-500
+            disabled:opacity-50
+          "
+        >
+
+          {
+            scanning
+              ? "Scanning..."
+              : "Run Market Scan"
+          }
+
+        </button>
+
+      </div>
+
     </div>
+
   );
+
 }
